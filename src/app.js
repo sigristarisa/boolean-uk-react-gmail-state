@@ -12,9 +12,7 @@ const App = () => {
 
   const starredMails = emails.filter((email) => email.starred);
 
-  const toggleHideRead = () => {
-    setHideRead(!hideRead);
-  };
+  const toggleHideRead = () => setHideRead(!hideRead);
 
   const handleReadEmails = (clickedEmail) => {
     const newEmailLists = emails.map((email) => {

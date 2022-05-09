@@ -17,6 +17,11 @@ const App = () => {
     setEmails(newEmailLists);
   };
 
+  const showUnreadNum = () => {
+    const unreadEmails = emails.filter((email) => !email.read);
+    return unreadEmails.length;
+  };
+
   return (
     <div className="app">
       <Header />
@@ -27,7 +32,7 @@ const App = () => {
             // onClick={() => {}}
           >
             <span className="label">Inbox</span>
-            <span className="count">?</span>
+            <span className="count">{showUnreadNum()}</span>
           </li>
           <li
             className="item"

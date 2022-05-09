@@ -5,6 +5,11 @@ import { useState } from "react";
 
 const App = () => {
   const [emails, setEmails] = useState(initialEmails);
+  const [hideRead, setHideRead] = useState(false);
+
+  const toggleHideRead = () => {
+    setHideRead(!hideRead);
+  };
 
   const handleReadEmails = (clickedEmail) => {
     const newEmailLists = emails.map((email) => {
@@ -26,6 +31,11 @@ const App = () => {
       return email;
     });
     setEmails(newEmailLists);
+  };
+
+  const hideReadEmails = () => {
+    const unreadEmails = emails.filter((email) => !email.read);
+    return hideRead ? unreadEmails : emails;
   };
 
   const showUnreadNum = () => {
@@ -63,15 +73,15 @@ const App = () => {
             <input
               id="hide-read"
               type="checkbox"
-              checked={false}
-              onChange={() => {}}
+              checked={hideRead}
+              onChange={() => toggleHideRead()}
             />
           </li>
         </ul>
       </nav>
       <main className="emails">
         <ul>
-          {emails.map((email) => {
+          {hideReadEmails().map((email) => {
             return (
               <li
                 className={email.read ? "email read" : "email unread"}

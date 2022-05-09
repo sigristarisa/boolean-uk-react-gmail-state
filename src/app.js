@@ -17,6 +17,17 @@ const App = () => {
     setEmails(newEmailLists);
   };
 
+  const handleStarredEmails = (clickedEmail) => {
+    const newEmailLists = emails.map((email) => {
+      if (clickedEmail === email) {
+        const starredEmail = { ...email, starred: !email.starred };
+        return starredEmail;
+      }
+      return email;
+    });
+    setEmails(newEmailLists);
+  };
+
   const showUnreadNum = () => {
     const unreadEmails = emails.filter((email) => !email.read);
     return unreadEmails.length;
@@ -70,11 +81,17 @@ const App = () => {
                   <input
                     className="select-checkbox"
                     type="checkbox"
+                    checked={email.read ? true : false}
                     onChange={() => handleReadEmails(email)}
                   />
                 </div>
                 <div className="star">
-                  <input className="star-checkbox" type="checkbox" />
+                  <input
+                    className="star-checkbox"
+                    type="checkbox"
+                    checked={email.starred ? true : false}
+                    onChange={() => handleStarredEmails(email)}
+                  />
                 </div>
                 <div className="sender">{email.sender}</div>
                 <div className="title">{email.title}</div>

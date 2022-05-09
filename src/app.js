@@ -6,19 +6,24 @@ import { useState } from "react";
 const App = () => {
   const [emails, setEmails] = useState(initialEmails);
 
-  const clickReadEmails = (clickedEmail) => {
+  const handleReadEmails = (clickedEmail) => {
     const newEmailLists = emails.map((email) => {
       if (clickedEmail === email) {
-        email.read = true;
+        const readEmail = { ...email, read: !email.read };
+        return readEmail;
       }
       return email;
     });
-    console.log(newEmailLists);
     setEmails(newEmailLists);
   };
 
   const showUnreadNum = () => {
     const unreadEmails = emails.filter((email) => !email.read);
+    return unreadEmails.length;
+  };
+
+  const showStarredNum = () => {
+    const unreadEmails = emails.filter((email) => email.starred);
     return unreadEmails.length;
   };
 
@@ -39,7 +44,7 @@ const App = () => {
             // onClick={() => {}}
           >
             <span className="label">Starred</span>
-            <span className="count">?</span>
+            <span className="count">{showStarredNum()}</span>
           </li>
 
           <li className="item toggle">
@@ -65,7 +70,7 @@ const App = () => {
                   <input
                     className="select-checkbox"
                     type="checkbox"
-                    onClick={() => clickReadEmails(email)}
+                    onChange={() => handleReadEmails(email)}
                   />
                 </div>
                 <div className="star">

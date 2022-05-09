@@ -3,9 +3,19 @@ import initialEmails from "./data/emails";
 import "./styles/app.css";
 import { useState } from "react";
 
-function App() {
+const App = () => {
   const [emails, setEmails] = useState(initialEmails);
-  // Use initialEmails for state
+
+  const clickReadEmails = (clickedEmail) => {
+    const newEmailLists = emails.map((email) => {
+      if (clickedEmail === email) {
+        email.read = true;
+      }
+      return email;
+    });
+    console.log(newEmailLists);
+    setEmails(newEmailLists);
+  };
 
   return (
     <div className="app">
@@ -33,7 +43,7 @@ function App() {
               id="hide-read"
               type="checkbox"
               checked={false}
-              // onChange={() => {}}
+              onChange={() => {}}
             />
           </li>
         </ul>
@@ -47,7 +57,11 @@ function App() {
                 key={email.id}
               >
                 <div className="select">
-                  <input className="select-checkbox" type="checkbox" />
+                  <input
+                    className="select-checkbox"
+                    type="checkbox"
+                    onClick={() => clickReadEmails(email)}
+                  />
                 </div>
                 <div className="star">
                   <input className="star-checkbox" type="checkbox" />
@@ -61,6 +75,6 @@ function App() {
       </main>
     </div>
   );
-}
+};
 
 export default App;

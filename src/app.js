@@ -6,6 +6,11 @@ import { useState } from "react";
 const App = () => {
   const [emails, setEmails] = useState(initialEmails);
   const [hideRead, setHideRead] = useState(false);
+  const [currentTab, setTab] = useState("inbox");
+
+  const unreadMails = emails.filter((email) => !email.read);
+
+  const starredMails = emails.filter((email) => email.starred);
 
   const toggleHideRead = () => {
     setHideRead(!hideRead);
@@ -13,39 +18,28 @@ const App = () => {
 
   const handleReadEmails = (clickedEmail) => {
     const newEmailLists = emails.map((email) => {
-      if (clickedEmail === email) {
-        const readEmail = { ...email, read: !email.read };
-        return readEmail;
-      }
-      return email;
+      return clickedEmail === email ? { ...email, read: !email.read } : email;
     });
     setEmails(newEmailLists);
   };
 
   const handleStarredEmails = (clickedEmail) => {
     const newEmailLists = emails.map((email) => {
-      if (clickedEmail === email) {
-        const starredEmail = { ...email, starred: !email.starred };
-        return starredEmail;
-      }
-      return email;
+      return clickedEmail === email
+        ? { ...email, starred: !email.starred }
+        : email;
     });
     setEmails(newEmailLists);
   };
 
-  const hideReadEmails = () => {
-    const unreadEmails = emails.filter((email) => !email.read);
-    return hideRead ? unreadEmails : emails;
-  };
-
-  const showUnreadNum = () => {
-    const unreadEmails = emails.filter((email) => !email.read);
-    return unreadEmails.length;
-  };
-
-  const showStarredNum = () => {
-    const unreadEmails = emails.filter((email) => email.starred);
-    return unreadEmails.length;
+  const getEmails = () => {
+    if (currentTab === "inbox") {
+      return hideRead ? unreadMails : emails;
+    }
+    if (currentTab === "starred") {
+      const starredUnreadMails = starredMails.filter((mail) => !mail.read);
+      return hideRead ? starredUnreadMails : starredMails;
+    }
   };
 
   return (
@@ -54,18 +48,18 @@ const App = () => {
       <nav className="left-menu">
         <ul className="inbox-list">
           <li
-            className="item active"
-            // onClick={() => {}}
+            className={currentTab === "inbox" ? "item active" : "item"}
+            onClick={() => setTab("inbox")}
           >
             <span className="label">Inbox</span>
-            <span className="count">{showUnreadNum()}</span>
+            <span className="count">{unreadMails.length}</span>
           </li>
           <li
-            className="item"
-            // onClick={() => {}}
+            className={currentTab === "starred" ? "item active" : "item"}
+            onClick={() => setTab("starred")}
           >
             <span className="label">Starred</span>
-            <span className="count">{showStarredNum()}</span>
+            <span className="count">{starredMails.length}</span>
           </li>
 
           <li className="item toggle">
@@ -81,7 +75,7 @@ const App = () => {
       </nav>
       <main className="emails">
         <ul>
-          {hideReadEmails().map((email) => {
+          {getEmails().map((email) => {
             return (
               <li
                 className={email.read ? "email read" : "email unread"}
